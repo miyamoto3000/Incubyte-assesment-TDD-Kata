@@ -26,10 +26,13 @@ public class AuthService {
             throw new RuntimeException("User already exists");
         }
 
+        
+        Role roleToSave = (request.getRole() != null) ? request.getRole() : Role.USER;
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(roleToSave) 
                 .build();
 
         userRepository.save(user);
@@ -42,7 +45,6 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-       
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -50,11 +52,9 @@ public class AuthService {
                 )
         );
 
-        
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-   
         String jwtToken = jwtService.generateToken(user);
 
         return AuthResponse.builder()
