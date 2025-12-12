@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TddKataApplication<TDD-Kata>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.TDD.Kata.TddKataApplication",
+            "projectName": "TDD-Kata",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
