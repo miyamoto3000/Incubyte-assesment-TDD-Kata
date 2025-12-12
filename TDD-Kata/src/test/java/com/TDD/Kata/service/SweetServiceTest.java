@@ -1,7 +1,7 @@
 package com.TDD.Kata.service;
 
 import com.TDD.Kata.model.Sweet;
-import com.TDD.Kata.repository.SweetRepository; // Will show error (Create interface next)
+import com.TDD.Kata.repository.SweetRepository; // Will be Red
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ class SweetServiceTest {
     private SweetRepository sweetRepository;
 
     @InjectMocks
-    private SweetService sweetService; // Will show error (Create class next)
+    private SweetService sweetService; // Will be Red
 
     @Test
     void shouldAddSweetSuccessfully() {
@@ -35,7 +35,6 @@ class SweetServiceTest {
                 .quantity(100)
                 .build();
 
-        // Simulate DB saving the sweet and returning it
         when(sweetRepository.save(any(Sweet.class))).thenReturn(sweetToAdd);
 
         // Act
