@@ -22,9 +22,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable) // Cleanest modern way
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                // ALLOW /error so you can see exceptions!
+                .requestMatchers("/api/auth/**", "/error").permitAll() 
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess

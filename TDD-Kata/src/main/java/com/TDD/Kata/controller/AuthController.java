@@ -1,6 +1,7 @@
 package com.TDD.Kata.controller;
 
 import com.TDD.Kata.dto.AuthResponse;
+import com.TDD.Kata.dto.LoginRequest;
 import com.TDD.Kata.dto.RegisterRequest;
 import com.TDD.Kata.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
+    } 
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }
