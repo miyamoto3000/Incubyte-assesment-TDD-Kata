@@ -23,21 +23,23 @@ public class SweetController {
 
     @GetMapping
     public ResponseEntity<List<Sweet>> getAllSweets() {
-        return null; 
+        return ResponseEntity.ok(sweetService.getAllSweets());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Sweet> getSweetById(@PathVariable String id) {
-        return null; 
+        return ResponseEntity.ok(sweetService.getSweetById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Sweet> updateSweet(@PathVariable String id, @RequestBody Sweet sweet) {
-        return null; 
+        return ResponseEntity.ok(sweetService.updateSweet(id, sweet));
     }
 
-    @DeleteMapping("/{id}")
+   @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // <--- CRITICAL: Locks the door
     public ResponseEntity<Void> deleteSweet(@PathVariable String id) {
-        return null; 
+        sweetService.deleteSweet(id);
+        return ResponseEntity.noContent().build();
     }
 }
