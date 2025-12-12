@@ -35,5 +35,10 @@ public class AuthService {
         return AuthResponse.builder()
                 .token(jwtToken)
                 .build();
+    } 
+
+  // TODO: Implement this in the Green Phase
+    public com.TDD.Kata.dto.AuthResponse login(com.TDD.Kata.dto.LoginRequest request) {
+        return null; // Fails the test (Red State)
     }
 }
