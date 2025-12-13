@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { api } from "../lib/api"; 
 import { ENDPOINTS } from "../lib/constants"; 
 import { Sweet } from "../types"; 
@@ -25,16 +26,16 @@ export function useSweets(searchParams: SearchParams = {}) {
         return res.data;
     };
 
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, isError, error } = useQuery<Sweet[], AxiosError>({
         queryKey,
         queryFn: fetchSweets,
     });
 
     return { 
-        sweets: data || [], 
+        sweets: data ?? [], 
         isLoading, 
-        isError: !!error, 
-        error: error as any 
+        isError,
+        error,
     };
 }
 

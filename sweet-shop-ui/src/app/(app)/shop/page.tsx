@@ -1,7 +1,7 @@
 "use client";
 
 // FIX: Corrected import path
-import { useSweets } from "../../../hooks/useSweets"; 
+import { useSweets } from "@/hooks/useSweets";
 import { SweetCard } from "@/components/shop/SweetCard";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -85,7 +85,7 @@ export default function ShopPage() {
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {sweets.map((sweet) => (
+                {sweets.map((sweet: Sweet) => (
                     <SweetCard key={sweet.id} sweet={sweet} />
                 ))}
             </div>

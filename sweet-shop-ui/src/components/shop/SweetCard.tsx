@@ -3,8 +3,7 @@ import { Sweet } from "@/types";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
-// FIX: Corrected import path (using relative path to avoid alias configuration issues)
-import { usePurchaseSweet } from "../../hooks/useSweets"; 
+import { usePurchaseSweet } from "@/hooks/useSweets";
 
 interface SweetCardProps {
     sweet: Sweet;

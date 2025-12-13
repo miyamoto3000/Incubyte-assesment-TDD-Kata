@@ -1,8 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-// FIX: Corrected import path
-import { useSweets } from "../../../hooks/useSweets"; 
+import { useSweets } from "@/hooks/useSweet";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { SweetForm } from "@/components/admin/SweetForm";
 import { SweetTable } from "@/components/admin/SweetTable";
@@ -11,10 +10,8 @@ import { Loader2 } from "lucide-react";
 
 export default function AdminPage() {
     const { user } = useAuth();
-    // Re-use the public useSweets query for simplicity, it fetches all sweets by default
-    const { sweets, isLoading, isError, error } = useSweets({}); 
+    const { sweets, isLoading, isError, error } = useSweets(); 
 
-    // Client-side guard for UX 
     if (user?.role !== Role.ADMIN) {
         return (
             <div className="text-destructive text-2xl font-bold text-center mt-20">
@@ -53,14 +50,12 @@ export default function AdminPage() {
                     </p>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    {/* Left Column: Add New Sweet Form */}
                     <Card className="lg:col-span-1 border-primary/20 h-fit">
                         <CardContent className="p-6">
                             <SweetForm onSuccess={() => {}} /> 
                         </CardContent>
                     </Card>
 
-                    {/* Right Column: Inventory Table */}
                     <div className="lg:col-span-3">
                         <SweetTable sweets={sweets} />
                     </div>
