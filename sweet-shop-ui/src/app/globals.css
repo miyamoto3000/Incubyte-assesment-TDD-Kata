@@ -4,57 +4,52 @@
 
 @layer base {
   :root {
-    /* --- THEME: MIDNIGHT CRAVINGS (Neon Raspberry) --- */
+    /* --- THEME: CRIMSON VELVET (Crimson/Fluffy Vibe) --- */
     --background: 240 10% 4%;     
     --foreground: 0 0% 98%;       
-    --card: 240 10% 6%;
+    --card: 240 10% 8%; /* Slightly lighter card background for depth */
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 4%;
     --popover-foreground: 0 0% 98%;
-    --primary: 330 85% 60%;
+    --primary: 350 85% 65%; /* CRIMSON: Hue shifted to 350, Lightness boosted */
     --primary-foreground: 0 0% 100%;
     --secondary: 240 4% 16%;
     --secondary-foreground: 210 40% 98%;
     --muted: 240 4% 16%;
     --muted-foreground: 215 20% 65%;
-    --accent: 330 85% 60%;
+    --accent: 350 85% 65%; /* Match new Crimson */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
     --border: 240 4% 20%;
     --input: 240 4% 16%;
-    --ring: 330 85% 60%;
+    --ring: 350 85% 65%; /* Match new Crimson */
     --radius: 0rem; 
   }
 }
 
 @layer base {
   * {
-    /* Safe replacement for @apply border-border */
     border-color: hsl(var(--border));
   }
   body {
-    /* Safe replacement for @apply bg-background text-foreground */
     background-color: hsl(var(--background)); 
     color: hsl(var(--foreground));
   }
 }
 
-/* --- EDGY CUSTOM SCROLLBAR (ALL @apply removed) --- */
+/* --- EDGY CUSTOM SCROLLBAR --- */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  /* Safe replacement for @apply bg-background */
   background-color: hsl(var(--background)); 
 }
 ::-webkit-scrollbar-thumb {
-  /* Safe replacement for @apply bg-muted */
   background-color: hsl(var(--muted));
-  border-radius: 0; /* Keep it sharp */
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  /* Safe replacement for @apply bg-primary/50 (using opacity) */
   background-color: hsl(var(--primary)); 
   opacity: 0.5;
 }

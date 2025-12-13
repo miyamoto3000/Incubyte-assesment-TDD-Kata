@@ -14,16 +14,18 @@ export default function RegisterPage() {
   const { register: authRegister } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterRequest>();
+  // Initialize form with default role USER
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterRequest>({
+    defaultValues: {
+      role: Role.USER, 
+    }
+  });
 
-  // NOTE: We default new users to the 'USER' role when registering on the frontend.
-  // The backend's AuthService already handles defaulting NULL roles to USER.
   const onSubmit = async (data: RegisterRequest) => {
     setIsLoading(true);
     try {
-      // Hardcode role to USER for public registration
-      const registrationData: RegisterRequest = { ...data, role: Role.USER };
-      await authRegister(registrationData);
+      // Use the selected role from the form data
+      await authRegister(data);
     } catch (error) {
       // Error handled by hook toast
     } finally {
@@ -33,9 +35,11 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md border-primary/20">
+      {/* Centered Box Structure is ensured by the Card component and flex container */}
+      <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold tracking-tighter">
+          {/* Classic/Edgy Title */}
+          <CardTitle className="text-4xl font-extrabold tracking-widest text-primary">
             REGISTER FOR <span className="text-foreground">ACCESS</span>
           </CardTitle>
           <p className="text-sm text-muted-foreground uppercase tracking-widest">
@@ -43,14 +47,14 @@ export default function RegisterPage() {
           </p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
               <Input
                 placeholder="USERNAME"
                 {...register("username", { required: true })}
-                className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-muted-foreground/50 uppercase tracking-wider"
+                className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 uppercase tracking-wider"
               />
-              {errors.username && <span className="text-xs text-destructive">Username is required</span>}
+              {errors.username && <span className="text-xs text-destructive pt-1 block">{errors.username.message || "Username is required"}</span>}
             </div>
             
             <div className="space-y-2">
@@ -58,9 +62,24 @@ export default function RegisterPage() {
                 type="password"
                 placeholder="PASSWORD"
                 {...register("password", { required: true })}
-                className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-muted-foreground/50 tracking-wider"
+                className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 tracking-wider"
               />
-              {errors.password && <span className="text-xs text-destructive">Password is required</span>}
+              {errors.password && <span className="text-xs text-destructive pt-1 block">{errors.password.message || "Password is required"}</span>}
+            </div>
+            
+            {/* NEW: Role Selection (for Admin testing/access) */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
+                ACCESS LEVEL
+              </label>
+              <select
+                {...register("role")}
+                // Apply input-like styling to the select field
+                className="flex h-10 w-full border border-input bg-secondary/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-none uppercase tracking-wider text-foreground"
+              >
+                <option value={Role.USER}>USER (Standard Craver)</option>
+                <option value={Role.ADMIN}>ADMIN (System Operator)</option>
+              </select>
             </div>
 
             <Button 
