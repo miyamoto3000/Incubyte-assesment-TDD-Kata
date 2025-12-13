@@ -86,5 +86,55 @@ class SweetServiceTest {
         sweetService.deleteSweet(id);
 
         verify(sweetRepository).deleteById(id); // Will Fail (Method does nothing)
+    } 
+
+    // ... existing tests ...
+
+    // 6. PURCHASE SWEET (Red -> Green)
+    @Test
+    @DisplayName("Should purchase sweet (decrease quantity)")
+    void shouldPurchaseSweet() {
+        // Arrange: Sweet with 10 items
+        Sweet sweet = Sweet.builder().id("1").name("Candy").quantity(10).build();
+        when(sweetRepository.findById("1")).thenReturn(Optional.of(sweet));
+        // Mock save to return the modified sweet
+        when(sweetRepository.save(any(Sweet.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Act
+        Sweet result = sweetService.purchaseSweet("1");
+
+        // Assert
+        assertEquals(9, result.getQuantity()); // Logic Check
+        verify(sweetRepository).save(sweet);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when purchasing out-of-stock sweet")
+    void shouldFailPurchaseIfOutOfStock() {
+        // Arrange: Sweet with 0 items
+        Sweet sweet = Sweet.builder().id("1").name("Candy").quantity(0).build();
+        when(sweetRepository.findById("1")).thenReturn(Optional.of(sweet));
+
+        // Act & Assert
+        Exception ex = assertThrows(RuntimeException.class, () -> sweetService.purchaseSweet("1"));
+        assertEquals("Sweet is out of stock", ex.getMessage());
+        
+        // Ensure we NEVER save a negative quantity
+        verify(sweetRepository, never()).save(any());
+    }
+
+    // 7. RESTOCK SWEET (Red -> Green)
+    @Test
+    @DisplayName("Should restock sweet (increase quantity)")
+    void shouldRestockSweet() {
+        Sweet sweet = Sweet.builder().id("1").quantity(5).build();
+        when(sweetRepository.findById("1")).thenReturn(Optional.of(sweet));
+        when(sweetRepository.save(any(Sweet.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Act: Add 50 more
+        Sweet result = sweetService.restockSweet("1", 50);
+
+        // Assert
+        assertEquals(55, result.getQuantity());
     }
 }

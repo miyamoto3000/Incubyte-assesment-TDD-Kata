@@ -5,7 +5,8 @@ import com.TDD.Kata.service.SweetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*; 
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize; 
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,8 +17,9 @@ public class SweetController {
 
     private final SweetService sweetService;
 
-    @PostMapping
-    public ResponseEntity<Sweet> addSweet(@RequestBody Sweet sweet) {
+   @PostMapping
+    @PreAuthorize("hasRole('ADMIN')") 
+    public ResponseEntity<Sweet> addSweet(@RequestBody @Valid Sweet sweet) {
         return ResponseEntity.ok(sweetService.addSweet(sweet));
     }
 
@@ -31,8 +33,9 @@ public class SweetController {
         return ResponseEntity.ok(sweetService.getSweetById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Sweet> updateSweet(@PathVariable String id, @RequestBody Sweet sweet) {
+   @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Sweet> updateSweet(@PathVariable String id, @RequestBody @Valid Sweet sweet) {
         return ResponseEntity.ok(sweetService.updateSweet(id, sweet));
     }
 

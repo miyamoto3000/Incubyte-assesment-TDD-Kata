@@ -29,12 +29,11 @@ public class SweetService {
     public Sweet updateSweet(String id, Sweet updatedSweet) {
         Sweet existingSweet = getSweetById(id);
         
-        // Update fields
-        existingSweet.setName(updatedSweet.getName());
-        existingSweet.setCategory(updatedSweet.getCategory());
-        existingSweet.setPrice(updatedSweet.getPrice());
-        existingSweet.setQuantity(updatedSweet.getQuantity());
-        
+    
+        if (updatedSweet.getName() != null) existingSweet.setName(updatedSweet.getName());
+        if (updatedSweet.getCategory() != null) existingSweet.setCategory(updatedSweet.getCategory());
+        if (updatedSweet.getPrice() != null) existingSweet.setPrice(updatedSweet.getPrice());
+        if (updatedSweet.getQuantity() != null) existingSweet.setQuantity(updatedSweet.getQuantity());
         return sweetRepository.save(existingSweet);
     }
 
