@@ -64,7 +64,14 @@ export function useAuth() {
       setUser(decoded);
 
       toast.success("Account created successfully.");
-      router.push('/shop');
+      
+      // FIX: Implement conditional redirection for ADMIN vs USER
+      if (decoded.role === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/shop');
+      }
+      
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Registration failed");
       throw error;

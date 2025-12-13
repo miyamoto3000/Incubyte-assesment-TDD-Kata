@@ -64,7 +64,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         
         // IMPORTANT: Allow your frontend's origin(s). localhost:3000 is standard for Next.js dev.
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3001"));
         
         // Allow all necessary headers (Authorization, Content-Type, etc.)
         configuration.setAllowedHeaders(List.of("*"));

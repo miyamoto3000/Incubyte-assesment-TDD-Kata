@@ -34,9 +34,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      {/* Centered Box Structure is ensured by the Card component and flex container */}
-      <Card className="w-full max-w-md">
+    // MODIFIED: Use a soft crimson tint (primary/10) for the background 
+    // to give it the "Crimson" feel. The padding remains for spacing.
+    <div className="min-h-screen flex items-center justify-center bg-primary/10 p-4">
+      {/* MODIFIED: Increased card size to max-w-xl for better two-column display
+         and emphasized the crimson border (primary) */}
+      <Card className="w-full max-w-xl border-4 border-primary">
         <CardHeader className="space-y-1 text-center">
           {/* Classic/Edgy Title */}
           <CardTitle className="text-4xl font-extrabold tracking-widest text-primary">
@@ -48,26 +51,30 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-2">
-              <Input
-                placeholder="USERNAME"
-                {...register("username", { required: true })}
-                className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 uppercase tracking-wider"
-              />
-              {errors.username && <span className="text-xs text-destructive pt-1 block">{errors.username.message || "Username is required"}</span>}
+            
+            {/* RETAINED: Two-column layout for username and password on medium screens and up */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Input
+                    placeholder="USERNAME"
+                    {...register("username", { required: true })}
+                    className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 uppercase tracking-wider"
+                  />
+                  {errors.username && <span className="text-xs text-destructive pt-1 block">{errors.username.message || "Username is required"}</span>}
+                </div>
+                
+                <div className="space-y-2">
+                  <Input
+                    type="password"
+                    placeholder="PASSWORD"
+                    {...register("password", { required: true })}
+                    className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 tracking-wider"
+                  />
+                  {errors.password && <span className="text-xs text-destructive pt-1 block">{errors.password.message || "Password is required"}</span>}
+                </div>
             </div>
             
-            <div className="space-y-2">
-              <Input
-                type="password"
-                placeholder="PASSWORD"
-                {...register("password", { required: true })}
-                className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 tracking-wider"
-              />
-              {errors.password && <span className="text-xs text-destructive pt-1 block">{errors.password.message || "Password is required"}</span>}
-            </div>
-            
-            {/* NEW: Role Selection (for Admin testing/access) */}
+            {/* Role Selection remains full width */}
             <div className="space-y-2">
               <label className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
                 ACCESS LEVEL

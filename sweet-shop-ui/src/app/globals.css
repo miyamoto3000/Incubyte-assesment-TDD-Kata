@@ -1,55 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
   :root {
-    /* --- THEME: CRIMSON VELVET (Crimson/Fluffy Vibe) --- */
-    --background: 240 10% 4%;     
-    --foreground: 0 0% 98%;       
-    --card: 240 10% 8%; /* Slightly lighter card background for depth */
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 350 85% 65%; /* CRIMSON: Hue shifted to 350, Lightness boosted */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 350 85% 65%; /* Match new Crimson */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 4% 20%;
-    --input: 240 4% 16%;
-    --ring: 350 85% 65%; /* Match new Crimson */
-    --radius: 0rem; 
+    --background: rgb(100, 7, 26);
+    --foreground: #edbaba;
   }
 }
 
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background)); 
-    color: hsl(var(--foreground));
-  }
-}
-
-/* --- EDGY CUSTOM SCROLLBAR --- */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background-color: hsl(var(--background)); 
-}
-::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted));
-  border-radius: 0;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--primary)); 
-  opacity: 0.5;
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
 }
