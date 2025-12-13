@@ -66,5 +66,12 @@ public Sweet purchaseSweet(String id, Integer amount) { // <--- Added amount
         Sweet sweet = getSweetById(id);
         sweet.setQuantity(sweet.getQuantity() + amount);
         return sweetRepository.save(sweet);
+    } 
+    public List<Sweet> searchSweets(String name, String category, 
+                                    java.math.BigDecimal minPrice, 
+                                    java.math.BigDecimal maxPrice) {
+        
+
+        return null;
     }
 }
