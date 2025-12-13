@@ -5,7 +5,8 @@ import com.TDD.Kata.repository.SweetRepository;
 import lombok.RequiredArgsConstructor; 
 import org.springframework.data.mongodb.core.MongoTemplate; 
 import org.springframework.data.mongodb.core.query.Criteria; 
-import org.springframework.data.mongodb.core.query.Query;    
+import org.springframework.data.mongodb.core.query.Query;   
+import org.springframework.data.mongodb.core.query.TextCriteria; 
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -72,41 +73,34 @@ public Sweet purchaseSweet(String id, Integer amount) { // <--- Added amount
         sweet.setQuantity(sweet.getQuantity() + amount);
         return sweetRepository.save(sweet);
     } 
-    public List<Sweet> searchSweets(String keyword, 
+public List<Sweet> searchSweets(String keyword, 
                                     BigDecimal minPrice, 
                                     BigDecimal maxPrice) {
         
         Query query = new Query();
         List<Criteria> criteriaList = new ArrayList<>();
 
-        // 1. "Search Bar" Logic (Keyword matches Name OR Category)
         if (keyword != null && !keyword.isBlank()) {
-            Criteria nameMatch = Criteria.where("name").regex(keyword, "i");
-            Criteria categoryMatch = Criteria.where("category").regex(keyword, "i");
             
-            // This creates the logic: (name LIKE keyword OR category LIKE keyword)
-            criteriaList.add(new Criteria().orOperator(nameMatch, categoryMatch));
+            TextCriteria textCriteria = TextCriteria.forDefaultLanguage().matchingAny(keyword);
+            query.addCriteria(textCriteria);
         }
 
-        // 2. "Sidebar Filter" Logic (Price Range)
+    
         if (minPrice != null || maxPrice != null) {
             Criteria priceCriteria = Criteria.where("price");
             if (minPrice != null) {
-                priceCriteria.gte(minPrice); // Greater than or equal
+                priceCriteria.gte(minPrice); 
             }
             if (maxPrice != null) {
-                priceCriteria.lte(maxPrice); // Less than or equal
+                priceCriteria.lte(maxPrice);
             }
             criteriaList.add(priceCriteria);
         }
-
-        // 3. Combine them with "AND"
-        // Final Query: (Name OR Category) AND (Price Range)
         if (!criteriaList.isEmpty()) {
             query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
         }
 
         return mongoTemplate.find(query, Sweet.class);
     }
-
 }

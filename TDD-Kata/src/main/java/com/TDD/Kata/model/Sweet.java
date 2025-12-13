@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -20,13 +21,15 @@ import java.math.BigDecimal;
 public class Sweet {
     @Id
     private String id;
-
+    
+    @TextIndexed(weight = 2)
     @NotBlank(message = "Name is required")
     private String name;
-
+    
+    @TextIndexed(weight = 1)
     @NotBlank(message = "Category is required")
     private String category;
-
+    
     @NotNull(message = "Price is required")
     @Min(value = 0, message = "Price must be non-negative")
     private BigDecimal price;

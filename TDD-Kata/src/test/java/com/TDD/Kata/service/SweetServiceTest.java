@@ -112,11 +112,11 @@ class SweetServiceTest {
     }
 
     // ==========================================
-    //       NEW EXTENSIVE SEARCH TESTS
+    //       NEW EXTENSIVE SEARCH TESTS (UPDATED)
     // ==========================================
 
     @Test
-    @DisplayName("Search: Should find by Keyword only (Checks Name OR Category)")
+    @DisplayName("Search: Should find by Keyword using Full Text Search")
     void shouldSearchByKeywordOnly() {
         // Arrange
         String keyword = "Chocolate";
@@ -133,10 +133,10 @@ class SweetServiceTest {
         Query executedQuery = queryCaptor.getValue();
         String queryString = executedQuery.toString();
 
-        // Verify structure: (Name regex OR Category regex)
-        assertTrue(queryString.contains("$or"), "Query should contain '$or' operator");
-        assertTrue(queryString.contains("name"), "Query should check 'name' field");
-        assertTrue(queryString.contains("category"), "Query should check 'category' field");
+        // UPDATED VERIFICATION:
+        // We now look for "$text" and "$search" instead of "$or", "name", "category"
+        assertTrue(queryString.contains("$text"), "Query should contain '$text' operator");
+        assertTrue(queryString.contains("$search"), "Query should contain '$search' operator");
         assertTrue(queryString.contains(keyword), "Query should contain the keyword");
     }
 
@@ -161,7 +161,8 @@ class SweetServiceTest {
         assertTrue(queryString.contains("price"), "Query should check 'price'");
         assertTrue(queryString.contains("$gte"), "Query should have greater-than-equal");
         assertTrue(queryString.contains("$lte"), "Query should have less-than-equal");
-        assertFalse(queryString.contains("$or"), "Query should NOT have '$or' when no keyword is present");
+        // Ensure NO text search is included
+        assertFalse(queryString.contains("$text"), "Query should NOT have '$text' when no keyword is present");
     }
 
     @Test
@@ -203,7 +204,7 @@ class SweetServiceTest {
     }
 
     @Test
-    @DisplayName("Search: Should combine Keyword AND Price Filter (Amazon Style)")
+    @DisplayName("Search: Should combine Text Search AND Price Filter")
     void shouldSearchByKeywordAndPrice() {
         // Arrange
         String keyword = "Ladoo";
@@ -218,9 +219,9 @@ class SweetServiceTest {
         verify(mongoTemplate).find(queryCaptor.capture(), eq(Sweet.class));
         String queryString = queryCaptor.getValue().toString();
 
-        // Verify: (Name OR Category) AND (Price <= 500)
-        assertTrue(queryString.contains("$or"), "Should have Keyword OR logic");
-        assertTrue(queryString.contains("name"), "Should check Name");
+        // UPDATED VERIFICATION:
+        // Verify: ($text) AND (Price <= 500)
+        assertTrue(queryString.contains("$text"), "Should have Text Search");
         assertTrue(queryString.contains("price"), "Should check Price");
         assertTrue(queryString.contains("$lte"), "Should check Max Price");
     }
