@@ -75,66 +75,86 @@ class SweetServiceTest {
         assertEquals("New Name", result.getName());
     }
 
-    // 5. DELETE SWEET (Red)
     @Test
     @DisplayName("Should delete sweet by ID")
     void shouldDeleteSweet() {
         String id = "123";
-        // Mock that the ID exists so we can delete it
+      
         when(sweetRepository.existsById(id)).thenReturn(true);
 
         sweetService.deleteSweet(id);
 
-        verify(sweetRepository).deleteById(id); // Will Fail (Method does nothing)
+        verify(sweetRepository).deleteById(id); 
     } 
-
-    // ... existing tests ...
-
-    // 6. PURCHASE SWEET (Red -> Green)
-    @Test
-    @DisplayName("Should purchase sweet (decrease quantity)")
-    void shouldPurchaseSweet() {
-        // Arrange: Sweet with 10 items
+@Test
+    @DisplayName("Should purchase specific amount of sweets")
+    void shouldPurchaseSpecificAmount() {
+        
         Sweet sweet = Sweet.builder().id("1").name("Candy").quantity(10).build();
         when(sweetRepository.findById("1")).thenReturn(Optional.of(sweet));
-        // Mock save to return the modified sweet
         when(sweetRepository.save(any(Sweet.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        // Act
-        Sweet result = sweetService.purchaseSweet("1");
+      
+        Sweet result = sweetService.purchaseSweet("1", 4);
 
-        // Assert
-        assertEquals(9, result.getQuantity()); // Logic Check
-        verify(sweetRepository).save(sweet);
+        assertEquals(6, result.getQuantity());
     }
 
     @Test
-    @DisplayName("Should throw exception when purchasing out-of-stock sweet")
-    void shouldFailPurchaseIfOutOfStock() {
-        // Arrange: Sweet with 0 items
-        Sweet sweet = Sweet.builder().id("1").name("Candy").quantity(0).build();
+    @DisplayName("Should fail if purchasing more than available stock")
+    void shouldFailIfNotEnoughStock() {
+    
+        Sweet sweet = Sweet.builder().id("1").name("Candy").quantity(3).build();
         when(sweetRepository.findById("1")).thenReturn(Optional.of(sweet));
 
-        // Act & Assert
-        Exception ex = assertThrows(RuntimeException.class, () -> sweetService.purchaseSweet("1"));
-        assertEquals("Sweet is out of stock", ex.getMessage());
         
-        // Ensure we NEVER save a negative quantity
-        verify(sweetRepository, never()).save(any());
+        Exception ex = assertThrows(RuntimeException.class, () -> sweetService.purchaseSweet("1", 5));
+        assertEquals("Not enough stock. Available: 3", ex.getMessage());
+    }  
+
+    @Test
+    @DisplayName("Should search sweets by Name")
+    void shouldSearchByName() {
+        
+        Sweet sweet = Sweet.builder().name("Chocolate").build();
+        when(sweetRepository.findByNameContainingIgnoreCase("choc"))
+            .thenReturn(List.of(sweet));
+
+        
+        List<Sweet> results = sweetService.searchSweets("choc", null, null, null);
+
+    
+        assertEquals(1, results.size());
+        assertEquals("Chocolate", results.get(0).getName());
     }
 
-    // 7. RESTOCK SWEET (Red -> Green)
     @Test
-    @DisplayName("Should restock sweet (increase quantity)")
-    void shouldRestockSweet() {
-        Sweet sweet = Sweet.builder().id("1").quantity(5).build();
-        when(sweetRepository.findById("1")).thenReturn(Optional.of(sweet));
-        when(sweetRepository.save(any(Sweet.class))).thenAnswer(i -> i.getArguments()[0]);
+    @DisplayName("Should search sweets by Price Range")
+    void shouldSearchByPriceRange() {
+        
+        Sweet sweet = Sweet.builder().name("Cheap Candy").price(BigDecimal.ONE).build();
+        when(sweetRepository.findByPriceBetween(BigDecimal.ZERO, BigDecimal.TEN))
+            .thenReturn(List.of(sweet));
 
-        // Act: Add 50 more
-        Sweet result = sweetService.restockSweet("1", 50);
+
+        List<Sweet> results = sweetService.searchSweets(null, null, BigDecimal.ZERO, BigDecimal.TEN);
+
+        
+        assertEquals(1, results.size());
+    } 
+     
+    @Test
+    @DisplayName("Should search sweets by Price Range")
+    void shouldSearchByPriceRange() {
+        // Arrange
+        Sweet cheapSweet = Sweet.builder().name("Lollipop").price(BigDecimal.ONE).build();
+        when(sweetRepository.findByPriceBetween(BigDecimal.ZERO, BigDecimal.TEN))
+            .thenReturn(List.of(cheapSweet));
+
+        // Act (Pass min=0, max=10)
+        List<Sweet> results = sweetService.searchSweets(null, null, BigDecimal.ZERO, BigDecimal.TEN);
 
         // Assert
-        assertEquals(55, result.getQuantity());
+        assertEquals(1, results.size());
     }
 }

@@ -42,5 +42,29 @@ public class SweetService {
             throw new RuntimeException("Sweet not found with id: " + id);
         }
         sweetRepository.deleteById(id);
+    } 
+
+    // ... existing methods ...
+
+public Sweet purchaseSweet(String id, Integer amount) { // <--- Added amount
+        Sweet sweet = getSweetById(id); 
+        if (amount <= 0) {
+            throw new RuntimeException("Purchase amount must be positive");
+        }
+        if (sweet.getQuantity() < amount) {
+            throw new RuntimeException("Not enough stock. Available: " + sweet.getQuantity());
+        }
+        sweet.setQuantity(sweet.getQuantity() - amount); 
+        return sweetRepository.save(sweet);
+    }
+
+    public Sweet restockSweet(String id, Integer amount) {
+        if (amount <= 0) {
+            throw new RuntimeException("Restock amount must be positive");
+        }
+
+        Sweet sweet = getSweetById(id);
+        sweet.setQuantity(sweet.getQuantity() + amount);
+        return sweetRepository.save(sweet);
     }
 }
