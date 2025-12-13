@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* --- THEME: MIDNIGHT CRAVINGS (Neon Raspberry) --- */
+    
+    /* BACKGROUND: Deep Graphite (Almost Black) */
+    --background: 240 10% 4%;     
+    --foreground: 0 0% 98%;       
+    
+    /* CARDS: Slightly lighter than background to create depth */
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 98%;
+
+    /* PRIMARY: Neon Raspberry Pink (The "Sweet" Accent) */
+    --primary: 330 85% 60%;       
+    --primary-foreground: 0 0% 100%;
+
+    /* SECONDARY: Deep Dark Grey for subtle buttons */
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* MUTED: For disabled text or subtle borders */
+    --muted: 240 4% 16%;
+    --muted-foreground: 215 20% 65%;
+
+    /* ACCENT: Same as Primary for hover states/highlights */
+    --accent: 330 85% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    /* DESTRUCTIVE: Sharp Red for errors/delete actions */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* BORDERS & INPUTS: Dark Grey */
+    --border: 240 4% 20%;
+    --input: 240 4% 16%;
+    
+    /* RING: Matching the Raspberry Pink for focus states */
+    --ring: 330 85% 60%;
+
+    /* RADIUS: 0rem ensures Sharp, Edgy corners */
+    --radius: 0rem; 
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border)); /* <--- Standard CSS (Safe) */
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* --- EDGY CUSTOM SCROLLBAR --- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary/50; /* Glows pink on hover */
+}
