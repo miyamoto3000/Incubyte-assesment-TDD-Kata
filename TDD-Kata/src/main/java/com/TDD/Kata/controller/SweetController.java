@@ -59,5 +59,16 @@ public class SweetController {
     
     public ResponseEntity<Sweet> restockSweet(@PathVariable String id, @RequestBody Integer amount) {
         return ResponseEntity.ok(sweetService.restockSweet(id, amount));
+    } 
+
+    // In SweetController.java
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Sweet>> searchSweets(
+            @RequestParam(required = false) String keyword,   // The Search Bar
+            @RequestParam(required = false) java.math.BigDecimal minPrice, // Filter
+            @RequestParam(required = false) java.math.BigDecimal maxPrice  // Filter
+    ) {
+        return ResponseEntity.ok(sweetService.searchSweets(keyword, minPrice, maxPrice));
     }
 }
