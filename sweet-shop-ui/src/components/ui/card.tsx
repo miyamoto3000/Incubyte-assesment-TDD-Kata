@@ -27,7 +27,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn("text-2xl font-semibold leading-none tracking-tight text-primary", className)} // Pink Title
+      className={cn("text-2xl font-semibold leading-none tracking-tight text-primary", className)}
       {...props}
     />
   )
@@ -52,4 +52,5 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 )
 CardFooter.displayName = "CardFooter"
 
+// FIX: Ensure CardFooter is exported
 export { Card, CardHeader, CardTitle, CardContent, CardFooter }

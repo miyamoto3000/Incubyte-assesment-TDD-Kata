@@ -1,0 +1,65 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../lib/api"; 
+import { ENDPOINTS } from "../lib/constants"; 
+import { Sweet } from "../types"; 
+import { toast } from 'sonner';
+
+interface SearchParams {
+    keyword?: string;
+    minPrice?: number;
+    maxPrice?: number;
+}
+
+export function useSweets(searchParams: SearchParams = {}) {
+    const { keyword, minPrice, maxPrice } = searchParams;
+    const queryKey = ['sweets', { keyword, minPrice, maxPrice }];
+
+    const fetchSweets = async (): Promise<Sweet[]> => {
+        const params = new URLSearchParams();
+        if (keyword) params.append('keyword', keyword);
+        if (minPrice !== undefined) params.append('minPrice', minPrice.toString());
+        if (maxPrice !== undefined) params.append('maxPrice', maxPrice.toString());
+
+        const url = `${ENDPOINTS.SWEETS.SEARCH}?${params.toString()}`;
+        const res = await api.get<Sweet[]>(url);
+        return res.data;
+    };
+
+    const { data, isLoading, error } = useQuery({
+        queryKey,
+        queryFn: fetchSweets,
+    });
+
+    return { 
+        sweets: data || [], 
+        isLoading, 
+        isError: !!error, 
+        error: error as any 
+    };
+}
+
+export function usePurchaseSweet() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ id, amount }: { id: string, amount: number }) => {
+            const endpoint = `${ENDPOINTS.SWEETS.PURCHASE(id)}?amount=${amount}`;
+            const res = await api.post<Sweet>(endpoint);
+            return res.data;
+        },
+        onSuccess: (newSweet) => {
+            queryClient.invalidateQueries({ queryKey: ['sweets'] });
+            queryClient.invalidateQueries({ queryKey: ['sweet', newSweet.id] });
+
+            toast.success(`Purchase successful! Quantity reduced by 1.`, {
+                description: `${newSweet.name} stock now at ${newSweet.quantity}.`
+            });
+        },
+        onError: (error: any) => {
+            const errorMessage = error.response?.data?.error || "Failed to purchase sweet. Check stock.";
+            toast.error("Transaction Failed", {
+                description: errorMessage,
+            });
+        },
+    });
+}

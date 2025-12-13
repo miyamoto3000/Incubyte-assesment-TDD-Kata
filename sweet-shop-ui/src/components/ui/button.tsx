@@ -1,11 +1,12 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot" // If you don't have this, remove 'asChild' logic
+import { Slot } from "@radix-ui/react-slot"
 import { cn } from "../../lib/utils"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean
-  variant?: "default" | "destructive" | "outline" | "ghost" | "link"
+  // FIX: Added "secondary" variant for styling
+  variant?: "default" | "destructive" | "outline" | "ghost" | "link" | "secondary"
   size?: "default" | "sm" | "lg" | "icon"
 }
 
@@ -13,9 +14,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     
-    // Manual variant handling since we skipped installing 'class-variance-authority'
     const variants = {
       default: "bg-primary text-primary-foreground hover:bg-primary/90",
+      // FIX: Added secondary styles (Dark Grey for subtle buttons)
+      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80", 
       destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
       ghost: "hover:bg-accent hover:text-accent-foreground",
@@ -32,7 +34,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-none", // Sharp corners
+          "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-none",
           variants[variant],
           sizes[size],
           className
