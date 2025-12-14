@@ -54,12 +54,14 @@ public class SweetController {
         return ResponseEntity.ok(sweetService.purchaseSweet(id, amount));
     }
 
-    @PostMapping("/{id}/restock")
-    @PreAuthorize("hasRole('ADMIN')")
-    
-    public ResponseEntity<Sweet> restockSweet(@PathVariable String id, @RequestBody Integer amount) {
-        return ResponseEntity.ok(sweetService.restockSweet(id, amount));
-    } 
+  @PostMapping("/{id}/restock")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<Sweet> restockSweet(
+    @PathVariable String id, 
+    @RequestParam(defaultValue = "1") Integer amount  // <-- Changed to @RequestParam
+) {
+    return ResponseEntity.ok(sweetService.restockSweet(id, amount));
+}
 
     // In SweetController.java
 

@@ -34,73 +34,94 @@ export default function RegisterPage() {
   };
 
   return (
-    // MODIFIED: Use a soft crimson tint (primary/10) for the background 
-    // to give it the "Crimson" feel. The padding remains for spacing.
-    <div className="min-h-screen flex items-center justify-center bg-primary/10 p-4">
-      {/* MODIFIED: Increased card size to max-w-xl for better two-column display
-         and emphasized the crimson border (primary) */}
-      <Card className="w-full max-w-xl border-4 border-primary">
-        <CardHeader className="space-y-1 text-center">
-          {/* Classic/Edgy Title */}
-          <CardTitle className="text-4xl font-extrabold tracking-widest text-primary">
-            REGISTER FOR <span className="text-foreground">ACCESS</span>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-black p-4 relative overflow-hidden">
+      {/* Grand crimson aurora overlay for luxurious depth */}
+      <div className="absolute inset-0 bg-gradient-to-br from-crimson/5 via-transparent to-rose-500/5"></div>
+      {/* Subtle metallic shimmer particles */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-crimson/20 to-rose-500/20 rounded-full mix-blend-soft-light blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-l from-rose-500/20 to-crimson/20 rounded-full mix-blend-soft-light blur-2xl animate-pulse delay-1000"></div>
+      </div>
+      
+      <Card className="w-full max-w-xl relative bg-gradient-to-br from-gray-800/60 via-gray-900/70 to-black/60 backdrop-blur-xl border border-crimson/20 shadow-2xl shadow-crimson/10 ring-1 ring-crimson/10 overflow-hidden">
+        {/* Luxurious inner glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-crimson/10 via-transparent to-rose-500/10 opacity-50"></div>
+        
+        <CardHeader className="space-y-3 text-center pb-8 relative z-10">
+          <div className="flex justify-center items-center mb-2">
+            <div className="w-2 h-2 bg-gradient-to-r from-crimson to-rose-500 rounded-full mr-2 animate-pulse"></div>
+          </div>
+          <CardTitle className="text-6xl font-serif font-black tracking-tight bg-gradient-to-r from-crimson via-red-600 to-rose-500 bg-clip-text text-transparent leading-tight">
+            Midnight
           </CardTitle>
-          <p className="text-sm text-muted-foreground uppercase tracking-widest">
-            Begin your dark transaction
+          <CardTitle className="text-6xl font-serif font-black tracking-tight text-white/95 leading-tight">
+            Sweets
+          </CardTitle>
+          <p className="text-sm text-rose-400/80 uppercase tracking-widest font-mono font-light border-b border-rose-500/30 pb-2 inline-block">
+            Initiate Your Eternal Craving
           </p>
         </CardHeader>
-        <CardContent>
+        
+        <CardContent className="pt-0 relative z-10">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            
-            {/* RETAINED: Two-column layout for username and password on medium screens and up */}
+            {/* Two-column layout for username and password */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Input
-                    placeholder="USERNAME"
-                    {...register("username", { required: true })}
-                    className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 uppercase tracking-wider"
-                  />
-                  {errors.username && <span className="text-xs text-destructive pt-1 block">{errors.username.message || "Username is required"}</span>}
-                </div>
-                
-                <div className="space-y-2">
-                  <Input
-                    type="password"
-                    placeholder="PASSWORD"
-                    {...register("password", { required: true })}
-                    className="bg-secondary/50 border-transparent focus:border-primary placeholder:text-foreground/80 tracking-wider"
-                  />
-                  {errors.password && <span className="text-xs text-destructive pt-1 block">{errors.password.message || "Password is required"}</span>}
-                </div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-crimson/5 to-rose-500/5 rounded-lg blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+                <Input
+                  placeholder="Username"
+                  {...register("username", { required: true })}
+                  className="relative bg-gray-700/40 border-0 border-b-2 border-gray-600/40 focus:border-crimson/70 text-gray-100 placeholder:text-gray-400/60 uppercase tracking-wide font-mono text-base h-14 px-5 transition-all duration-300 focus:bg-gray-700/60 shadow-md shadow-crimson/5 rounded-lg"
+                />
+                {errors.username && <span className="text-xs text-red-400/90 font-mono block mt-2 pl-1">{errors.username.message || "Username required"}</span>}
+              </div>
+              
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-crimson/5 to-rose-500/5 rounded-lg blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  {...register("password", { required: true })}
+                  className="relative bg-gray-700/40 border-0 border-b-2 border-gray-600/40 focus:border-crimson/70 text-gray-100 placeholder:text-gray-400/60 tracking-wide font-mono text-base h-14 px-5 transition-all duration-300 focus:bg-gray-700/60 shadow-md shadow-crimson/5 rounded-lg"
+                />
+                {errors.password && <span className="text-xs text-red-400/90 font-mono block mt-2 pl-1">{errors.password.message || "Password required"}</span>}
+              </div>
             </div>
             
-            {/* Role Selection remains full width */}
-            <div className="space-y-2">
-              <label className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
-                ACCESS LEVEL
+            {/* Role Selection */}
+            <div className="relative group">
+              <label className="text-xs text-rose-400/80 uppercase tracking-widest font-mono font-light block mb-3">
+                Access Tier
               </label>
+              <div className="absolute inset-0 bg-gradient-to-r from-crimson/5 to-rose-500/5 rounded-lg blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"></div>
               <select
                 {...register("role")}
-                // Apply input-like styling to the select field
-                className="flex h-10 w-full border border-input bg-secondary/50 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-none uppercase tracking-wider text-foreground"
+                className="relative bg-gray-700/40 border-0 border-b-2 border-gray-600/40 focus:border-crimson/70 text-gray-100 uppercase tracking-wide font-mono text-base h-14 px-5 transition-all duration-300 focus:bg-gray-700/60 shadow-md shadow-crimson/5 rounded-lg w-full appearance-none bg-no-repeat bg-right pr-10"
               >
-                <option value={Role.USER}>USER (Standard Craver)</option>
-                <option value={Role.ADMIN}>ADMIN (System Operator)</option>
+                <option value={Role.USER}>User (Standard Craver)</option>
+                <option value={Role.ADMIN}>Admin (System Operator)</option>
               </select>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full text-lg font-bold tracking-widest py-6"
+              className="w-full text-lg font-serif font-bold uppercase tracking-widest py-5 bg-gradient-to-r from-crimson via-red-600 to-rose-500 hover:from-red-600 hover:via-rose-500 hover:to-crimson text-white shadow-xl shadow-crimson/25 hover:shadow-2xl hover:shadow-red-500/40 rounded-lg transition-all duration-500 ease-out transform hover:scale-[1.02] hover:-translate-y-0.5 relative overflow-hidden group/button"
               disabled={isLoading}
             >
-              {isLoading ? <Loader2 className="animate-spin mr-2" /> : "JOIN THE CRAVE"}
+              <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 -skew-x-12 transform -translate-x-full group-hover/button:translate-x-full transition-transform duration-1000 ease-out"></div>
+              <span className="relative flex items-center justify-center">
+                {isLoading ? <Loader2 className="animate-spin mr-3 w-5 h-5" /> : null}
+                Join the Crave
+              </span>
             </Button>
             
-            <div className="text-center text-xs text-muted-foreground mt-4">
-              ALREADY HAVE AN ACCOUNT?{" "}
-              <Link href="/login" className="text-primary hover:underline font-bold">
-                LOGIN
+            <div className="text-center text-xs text-gray-400/80 font-mono mt-6 pt-4 border-t border-gray-700/40">
+              Already bound to the shadows?{" "}
+              <Link 
+                href="/login" 
+                className="text-crimson hover:text-rose-400 font-semibold underline decoration-wavy decoration-crimson/40 transition-all duration-300 hover:decoration-rose-400/60"
+              >
+                Return to the Veil
               </Link>
             </div>
           </form>

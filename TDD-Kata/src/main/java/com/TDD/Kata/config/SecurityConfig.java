@@ -39,13 +39,20 @@ public class SecurityConfig {
             
             // 3. Configure authorization for requests
             .authorizeHttpRequests(auth -> auth
-                // CRITICAL FIX: Permit all OPTIONS requests globally FIRST to solve CORS preflight issues
+                
+                // CRITICAL FIX 1: Permit all OPTIONS requests globally FIRST to solve CORS preflight issues
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
                 
-                // ALLOW /api/auth/** for login/register, and /error for exception handling
-                .requestMatchers("/api/auth/**", "/error").permitAll() 
+                // CRITICAL FIX 2: Explicitly permit all methods for the internal /error path to stop security filter chain processing on redirects
+                .requestMatchers("/error").permitAll()
                 
-                // All other requests must be authenticated
+                // FIX 3: Allow public access (GET) to all sweets endpoints for browsing (Shop)
+                .requestMatchers(HttpMethod.GET, "/api/sweets", "/api/sweets/**").permitAll() 
+                
+                // ALLOW /api/auth/** for login/register
+                .requestMatchers("/api/auth/**").permitAll() 
+                
+                // All other requests must be authenticated (e.g., POST/PUT/DELETE for admin, POST for purchase)
                 .anyRequest().authenticated()
             )
             
@@ -85,4 +92,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-}
+}        
+        

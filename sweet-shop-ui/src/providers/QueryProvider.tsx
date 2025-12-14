@@ -7,9 +7,13 @@ export default function QueryProvider({ children }: { children: React.ReactNode 
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
-        // Data stays fresh for 1 min, then refetches in background
-        staleTime: 60 * 1000, 
-        retry: 1, // Retry failed requests once before showing error
+        // Data stays fresh for 5 min, then refetches in background (less aggressive)
+        staleTime: 5 * 60 * 1000, 
+        gcTime: 5 * 60 * 1000, // Keep inactive data 5 min before GC
+        retry: 3, // Retry failed requests 3x
+      },
+      mutations: {
+        retry: 1,
       },
     },
   }));
