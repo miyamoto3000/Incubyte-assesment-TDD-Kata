@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap; // <-- Ensure this is imported
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -37,7 +39,11 @@ public class AuthService {
 
         userRepository.save(user);
         
-        String jwtToken = jwtService.generateToken(user);
+        // FIX: Explicitly add the role claim to the JWT payload
+        var claims = new HashMap<String, Object>();
+        claims.put("role", user.getRole().name()); // Add role
+        
+        String jwtToken = jwtService.generateToken(claims, user); // Use overloaded generateToken
         
         return AuthResponse.builder()
                 .token(jwtToken)
@@ -55,7 +61,11 @@ public class AuthService {
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String jwtToken = jwtService.generateToken(user);
+        // FIX: Explicitly add the role claim to the JWT payload
+        var claims = new HashMap<String, Object>();
+        claims.put("role", user.getRole().name()); // Add role
+        
+        String jwtToken = jwtService.generateToken(claims, user); // Use overloaded generateToken
 
         return AuthResponse.builder()
                 .token(jwtToken)

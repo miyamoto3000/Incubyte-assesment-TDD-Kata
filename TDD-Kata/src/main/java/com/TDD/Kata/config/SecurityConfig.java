@@ -3,6 +3,7 @@ package com.TDD.Kata.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,8 +39,13 @@ public class SecurityConfig {
             
             // 3. Configure authorization for requests
             .authorizeHttpRequests(auth -> auth
+                // CRITICAL FIX: Permit all OPTIONS requests globally FIRST to solve CORS preflight issues
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
+                
                 // ALLOW /api/auth/** for login/register, and /error for exception handling
                 .requestMatchers("/api/auth/**", "/error").permitAll() 
+                
+                // All other requests must be authenticated
                 .anyRequest().authenticated()
             )
             
@@ -57,19 +63,18 @@ public class SecurityConfig {
     
     /**
      * Defines the global CORS configuration source.
-     * This allows the Next.js frontend (running on 3000) to interact with the backend.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // IMPORTANT: Allow your frontend's origin(s). localhost:3000 is standard for Next.js dev.
+        // IMPORTANT: Allow your frontend's origin(s). 
         configuration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3001"));
         
         // Allow all necessary headers (Authorization, Content-Type, etc.)
         configuration.setAllowedHeaders(List.of("*"));
         
-        // Allow the HTTP methods used by the frontend (GET, POST, PUT, DELETE, OPTIONS)
+        // Allow the HTTP methods used by the frontend
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         
         // Crucial for JWT authentication: allows the browser to send cookies/auth headers
